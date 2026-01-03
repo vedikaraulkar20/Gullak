@@ -1,72 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Gullak - Digital Micro-Savings</title>
+    <link rel="manifest" href="manifest.json">
     <style>
         :root {
             --primary: #2e7d32;
             --secondary: #ffd700;
             --bg: #f0f2f5;
+            --card: #ffffff;
         }
-        body { font-family: 'Inter', system-ui, sans-serif; background-color: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        html,body{height:100%;margin:0}
+        body { font-family: 'Inter', system-ui, sans-serif; background-color: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         
         /* Main Container */
-        .app-shell { background: white; width: 375px; height: 667px; border-radius: 40px; box-shadow: 0 30px 60px rgba(0,0,0,0.12); display: flex; flex-direction: column; overflow: hidden; border: 8px solid #1a1a1a; }
+        .app-shell { background: var(--card); width: 375px; max-width: 95vw; height: 667px; border-radius: 28px; box-shadow: 0 30px 60px rgba(0,0,0,0.12); display: flex; flex-direction: column; overflow: hidden; border: 6px solid rgba(0,0,0,0.03); }
         
         /* Language Selector */
-        .lang-nav { display: flex; justify-content: space-around; padding: 15px; background: #1a1a1a; }
-        .lang-nav button { background: transparent; border: 1px solid #444; color: #aaa; padding: 5px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; transition: 0.3s; }
-        .lang-nav button.active { border-color: var(--secondary); color: var(--secondary); }
+        .lang-nav { display: flex; justify-content: space-around; padding: 12px; background: #111; }
+        .lang-nav button { background: transparent; border: 1px solid #444; color: #aaa; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; transition: 0.2s; }
+        .lang-nav button.active { border-color: var(--secondary); color: var(--secondary); box-shadow: 0 4px 10px rgba(0,0,0,0.12); }
 
         /* Header Card */
-        .top-card { background: linear-gradient(135deg, var(--secondary) 0%, #fbc02d 100%); padding: 30px 20px; text-align: center; color: #1b5e20; }
-        .top-card h1 { margin: 0; font-size: 32px; font-weight: 800; text-transform: uppercase; }
-        
+        .top-card { background: linear-gradient(135deg, var(--secondary) 0%, #fbc02d 100%); padding: 22px 16px; text-align: center; color: #1b5e20; }
+        .top-card h1 { margin: 0; font-size: 28px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .top-card span { display:block; margin-top:8px; font-weight:600; color:#184f15; font-size:14px; }
+
         /* Savings Display */
-        .content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
-        .icon-wrapper { font-size: 80px; margin-bottom: 20px; animation: float 3s ease-in-out infinite; }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
-        
-        .balance-label { color: #888; font-weight: 600; font-size: 14px; margin-bottom: 5px; }
-        .balance-val { font-size: 56px; font-weight: 900; color: var(--primary); margin: 0; }
+        .content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; gap:10px; }
+        .icon-wrapper { font-size: 80px; margin-bottom: 6px; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0px); } }
+        .balance-label { color: #666; font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+        .balance-val { font-size: 48px; font-weight: 900; color: var(--primary); margin: 0; }
         
         /* Action Button */
-        .invest-btn { background: var(--primary); color: white; border: none; width: 90%; padding: 22px; border-radius: 24px; font-size: 20px; font-weight: 700; cursor: pointer; transition: 0.2s; box-shadow: 0 10px 20px rgba(46, 125, 50, 0.2); margin-top: 40px; }
-        .invest-btn:active { transform: scale(0.96); box-shadow: 0 4px 8px rgba(46, 125, 50, 0.2); }
+        .invest-btn { background: var(--primary); color: white; border: none; width: 90%; padding: 18px; border-radius: 18px; font-size: 18px; font-weight: 700; cursor: pointer; transition: transform 0.12s ease; box-shadow: 0 8px 18px rgba(46,125,50,0.12); }
+        .invest-btn:active { transform: scale(0.98); }
 
         /* Footer/Trust */
-        .footer { background: #fdfdfd; padding: 25px; text-align: center; border-top: 1px solid #eee; }
-        .verified { display: flex; align-items: center; justify-content: center; gap: 5px; color: #f57f17; font-size: 13px; font-weight: 700; margin-bottom: 10px; }
-        .tip-box { font-size: 13px; color: #666; background: #fffde7; padding: 10px; border-radius: 12px; }
+        .footer { background: #fdfdfd; padding: 18px; text-align: center; border-top: 1px solid #eee; }
+        .verified { display: flex; align-items: center; justify-content: center; gap: 8px; color: #f57f17; font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+        .tip-box { font-size: 13px; color: #444; background: #fffde7; padding: 8px; border-radius: 12px; max-width: 90%; margin: 0 auto; }
+
+        /* Toast */
+        #toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: 34px; background: rgba(0,0,0,0.8); color: #fff; padding: 10px 14px; border-radius: 10px; font-size: 14px; display: none; z-index: 1000; }
+
+        @media (max-width:420px) {
+            .app-shell { height: 88vh; border-radius: 16px; }
+            .top-card h1 { font-size: 22px; }
+            .balance-val { font-size: 40px; }
+        }
     </style>
 </head>
 <body>
-    <div class="app-shell">
-        <nav class="lang-nav">
-            <button onclick="changeLanguage('en')" id="en-btn" class="active">English</button>
-            <button onclick="changeLanguage('hi')" id="hi-btn">हिंदी</button>
-            <button onclick="changeLanguage('mr')" id="mr-btn">मराठी</button>
+    <div class="app-shell" role="application" aria-label="Gullak micro savings app">
+        <nav class="lang-nav" role="navigation" aria-label="Language selector">
+            <button onclick="changeLanguage('en')" id="en-btn" class="active" aria-pressed="true">English</button>
+            <button onclick="changeLanguage('hi')" id="hi-btn" aria-pressed="false">हिंदी</button>
+            <button onclick="changeLanguage('mr')" id="mr-btn" aria-pressed="false">मराठी</button>
         </nav>
 
-        <header class="top-card">
+        <header class="top-card" role="banner">
             <h1 id="title">GULLAK</h1>
-            <span id="tagline" style="font-weight: 600;">Your Smart Digital Savings</span>
+            <span id="tagline">Your Smart Digital Savings</span>
         </header>
 
-        <main class="content">
-            <div class="icon-wrapper">🏺</div>
+        <main class="content" role="main">
+            <div class="icon-wrapper" aria-hidden="true">🏺</div>
             <p id="label" class="balance-label">Total Amount Saved</p>
-            <h2 class="balance-val">₹<span id="balance">0</span></h2>
-            <button id="main-btn" class="invest-btn" onclick="invest()">Invest ₹10 Now</button>
+            <h2 class="balance-val" aria-live="polite"> <span id="balance">₹0.00</span></h2>
+            <button id="main-btn" class="invest-btn" onclick="invest()" aria-label="Invest ten rupees">Invest ₹10 Now</button>
         </main>
 
-        <footer class="footer">
+        <footer class="footer" role="contentinfo">
             <div id="trust" class="verified">🛡️ 100% Secure & SEBI Verified</div>
             <div id="tip" class="tip-box">"A penny saved is a penny earned."</div>
         </footer>
     </div>
+
+    <div id="toast" role="status"></div>
+
     <script src="script.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(console.error);
+      }
+    </script>
 </body>
 </html>
